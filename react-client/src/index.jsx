@@ -1,34 +1,37 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import $ from 'jquery';
+import axios from 'axios';
 import List from './components/List.jsx';
+import Cards from './components/Cards.jsx';
+// import StackGrid from "react-stack-grid";
 
 class App extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { 
+    this.state = {
       items: []
     }
   }
 
   componentDidMount() {
-    $.ajax({
-      url: '/items', 
-      success: (data) => {
-        this.setState({
-          items: data
-        })
-      },
-      error: (err) => {
-        console.log('err', err);
-      }
-    });
+    // axios.get({
+    //   url: '/items',
+    //   success: (data) => {
+    //     this.setState({
+    //       items: data
+    //     })
+    //   },
+    //   error: (err) => {
+    //     console.log('err', err);
+    //   }
+    // });
   }
 
   render () {
     return (<div>
       <h1>Item List</h1>
       <List items={this.state.items}/>
+      <Cards/>
     </div>)
   }
 }
