@@ -1,39 +1,171 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import ReactDOM from 'react-dom';
 import axios from 'axios';
-import List from './components/List.jsx';
-import Cards from './components/Cards.jsx';
-// import StackGrid from "react-stack-grid";
+import Card from './components/Card.jsx';
+import styled, { keyframes } from 'styled-components';
+import './styles.css';
 
-class App extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      items: []
-    }
-  }
+const App = () => {
+  const [cards, setCards] = useState([])
 
-  componentDidMount() {
-    // axios.get({
-    //   url: '/items',
-    //   success: (data) => {
-    //     this.setState({
-    //       items: data
-    //     })
-    //   },
-    //   error: (err) => {
-    //     console.log('err', err);
-    //   }
-    // });
-  }
+  useEffect (() => {
+    axios.get('/mvp')
+    .then((res) => {
+      setCards(res.data);
+    })
+    .catch((err) => console.log('err', err))
+  },[]);
+  // componentDidMount() {
+  //   axios.get('/mvp')
+  //   .then((res) => {
+  //     this.setState({
+  //       items: res.data
+  //     })
+  //   })
+  //   .catch((err) => {
+  //     console.log('err', err);
+  //   })
+  // }
 
-  render () {
-    return (<div>
-      <h1>Item List</h1>
-      <List items={this.state.items}/>
-      <Cards/>
-    </div>)
-  }
+  // render () {
+    return (
+      <AppWrapper>
+      <Button>Restart</Button>
+      <h1>Spongebob and Friends</h1>
+      <Card cardInfo={this}></Card>
+      </AppWrapper>
+    )
+  // }
 }
+
+const AppWrapper = styled.div`
+  background-color: #2ec1ac;
+  font-family: Arial;
+  margin: 0 auto;
+  width: 50%;
+`;
+
+const Button = styled.button`
+  position: fixed;
+  top: 100px;
+  right: 26%;
+  cursor: pointer;
+  letter-spacing: 0.7px;
+  font-size: 14px;
+  line-height: 18px;
+  font-weight: 450;
+  border-radius: 7px;
+  color: #000;
+  height: 30px;
+  background-color: #eff48e;
+  font-family: Circular, -apple-system, BlinkMacSystemFont, Roboto, "Helvetica Neue", sans-serif;
+  border-width: 1px;
+  outline: none;
+`;
+
+// class App extends React.Component {
+//   constructor(props) {
+//     super(props);
+//     this.state = {
+//       isFlipped: Array(16).fill(false),
+//       shuffledCard: App.duplicateCard().sort(() => Math.random() - 0.5),
+//       clickCount: 1,
+//       prevSelectedCard: -1,
+//       prevCardId: -1
+//     };
+//   }
+
+//   const DuplicateCard = () => {
+//     return [0,1,2,3,4,5,6,7].reduce((preValue, current, index, array) => {
+//       return preValue.concat([current, current])
+//     },[]);
+//   };
+
+//   handleClick = event => {
+//     event.preventDefault();
+//     const cardId = event.target.id;
+//     const newFlipps = this.state.isFlipped.slice();
+//     this.setState({
+//         prevSelectedCard: this.state.shuffledCard[cardId],
+//         prevCardId: cardId
+//     });
+
+//     if (newFlipps[cardId] === false) {
+//       newFlipps[cardId] = !newFlipps[cardId];
+//       this.setState(prevState => ({
+//         isFlipped: newFlipps,
+//         clickCount: this.state.clickCount + 1
+//       }));
+
+//       if (this.state.clickCount === 2) {
+//         this.setState({ clickCount: 1 });
+//         const prevCardId = this.state.prevCardId;
+//         const newCard = this.state.shuffledCard[cardId];
+//         const previousCard = this.state.prevSelectedCard;
+
+//         this.isCardMatch(previousCard, newCard, prevCardId, cardId);
+//       }
+//     }
+//   };
+
+//   isCardMatch = (card1, card2, card1Id, card2Id) => {
+//     if (card1 === card2) {
+//       const hideCard = this.state.shuffledCard.slice();
+//       hideCard[card1Id] = -1;
+//       hideCard[card2Id] = -1;
+//       setTimeout(() => {
+//         this.setState(prevState => ({
+//           shuffledCard: hideCard
+//         }))
+//       }, 1000);
+//     } else {
+//       const flipBack = this.state.isFlipped.slice();
+//       flipBack[card1Id] = false;
+//       flipBack[card2Id] = false;
+//       setTimeout(() => {
+//         this.setState(prevState => ({ isFlipped: flipBack }));
+//       }, 1000);
+//     }
+//   };
+
+//   restartGame = () => {
+//     this.setState({
+//       isFlipped: Array(16).fill(false),
+//       shuffledCard: App.duplicateCard().sort(() => Math.random() - 0.5),
+//       clickCount: 1,
+//       prevSelectedCard: -1,
+//       prevCardId: -1
+//     });
+//   };
+
+//   isGameOver = () => {
+//     return this.state.isFlipped.every((element, index, array) => element !== false);
+//   };
+
+//   render() {
+//     return (
+//     <div>
+//       <Header restartGame={this.restartGame} />
+//       { this.isGameOver() ? <GameOver restartGame={this.restartGame} /> :
+//       <div className="grid-container">
+//           {
+//             this.state.shuffledCard.map((cardNumber, index) =>
+//               <Card
+//                 key={index}
+//                 id={index}
+//                 cardNumber={cardNumber}
+//                 isFlipped={this.state.isFlipped[index]}
+//                 handleClick={this.handleClick}
+//               />
+//             )
+//           }
+//         </div>
+//       }
+//     </div>
+//     );
+//   }
+// }
+
+
 
 ReactDOM.render(<App />, document.getElementById('app'));

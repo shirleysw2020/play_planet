@@ -2,19 +2,20 @@ var express = require('express');
 var bodyParser = require('body-parser');
 // UNCOMMENT THE DATABASE YOU'D LIKE TO USE
 // var items = require('../database-mysql');
-// var items = require('../database-mongo');
+var model = require('../database-mongo');
 
 var app = express();
 
 // UNCOMMENT FOR REACT
 app.use(express.static(__dirname + '/../react-client/dist'));
 
-app.get('/items', function (req, res) {
-  items.selectAll(function(err, data) {
+app.get('/mvp', function (req, res) {
+  model.selectAll(function(err, data) {
     if(err) {
-      res.sendStatus(500);
+      console.log('server failed getting db')
+      res.status(500);
     } else {
-      res.json(data);
+      res.status(200).send(data);
     }
   });
 });

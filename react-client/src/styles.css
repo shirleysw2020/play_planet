@@ -1,8 +1,16 @@
 body {
   margin: 0;
+  background-color: #d8d3b0;
 }
 
-main {
-  background-color: #f6f4e6;
-  display: flex;
+#app {
+  background-color: #d8d3b0;
+}
+
+.main {
+  background-color: #d8d3b0;
+  display: grid;
+  grid-gap: 1px;
+  grid-template-columns: auto auto auto auto;
+  padding: 10px 150px 10px 150px;
 }

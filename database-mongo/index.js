@@ -1,25 +1,20 @@
 var mongoose = require('mongoose');
-mongoose.connect('mongodb://localhost/test');
+mongoose.connect('mongodb://localhost/mvp');
 
 var db = mongoose.connection;
 
-db.on('error', function() {
-  console.log('mongoose connection error');
+db.on('error', function() {console.log('mongoose connection error');});
+db.once('open', function() {console.log('mongoose connected successfully');});
+
+var cardSchema = mongoose.Schema({
+  id: Number,
+  picture: String
 });
 
-db.once('open', function() {
-  console.log('mongoose connected successfully');
-});
-
-var itemSchema = mongoose.Schema({
-  description: String
-  currentPrice: Number,
-});
-
-var Item = mongoose.model('Item', itemSchema);
+var Card = mongoose.model('Item', cardSchema);
 
 var selectAll = function(callback) {
-  Item.find({}, function(err, items) {
+  Card.find({}, function(err, items) {
     if(err) {
       callback(err, null);
     } else {
@@ -28,4 +23,5 @@ var selectAll = function(callback) {
   });
 };
 
+module.exports.Card = Card;
 module.exports.selectAll = selectAll;
