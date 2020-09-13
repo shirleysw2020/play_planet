@@ -42,7 +42,7 @@ const Header = styled.div`
   background-color: #2ec1ac;
   height: 100px;
   margin-bottom: 20px;
-  border-radius: 7px;
+  border-radius: 15px;
   justify-content: center;
 `;
 

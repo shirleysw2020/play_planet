@@ -1,13 +1,17 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 // import ReactCardFlip from "react-card-flip";
 
 const Card = ({cards, start}) => {
 
-  const flipPic = (id) => {
-    // console.log(event.target.id, 'id?')
-    console.log(id, 'able to get clicked pic id:)')
+  const clickCard = (id) => {
+    console.log(id, 'able to get clicked pic id :)');
+    setCard1(id);
+
+
   }
+  const [card1, setCard1] = useState(null);
+  const [card2, setCard2] = useState(null);
 
   return(
   <GameBoard>
@@ -15,7 +19,7 @@ const Card = ({cards, start}) => {
       {cards.map((card) => {
         return (
           start == 0
-          ? <Picture onClick={() => {flipPic(card.id)}} src={"https://5erflies.s3-us-west-1.amazonaws.com/htmls/mvp/bckgrd.jpg"}>
+          ? <Picture onClick={() => {clickCard(card.id)}} src={"https://5erflies.s3-us-west-1.amazonaws.com/htmls/mvp/bckgrd.jpg"}>
           </Picture>
           : <Picture src={card.picture}>
           </Picture>
@@ -44,7 +48,7 @@ const Picture = styled.img`
 const GameBoard = styled.div`
   background-color: #eff48e;
   padding: 40px 0 40px 0;
-  border-radius: 7px;
+  border-radius: 15px;
 `;
 // const Card = ({ id, isFlipped, handleClick, cardNumber }) => (
 //   <ReactCardFlip isFlipped={isFlipped} flipSpeedBackToFront={1} flipSpeedFrontToBack={1} >
