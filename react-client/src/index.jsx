@@ -3,10 +3,15 @@ import ReactDOM from 'react-dom';
 import axios from 'axios';
 import Card from './components/Card.jsx';
 import styled, { keyframes } from 'styled-components';
-import './styles.css';
 
 const App = () => {
-  const [cards, setCards] = useState([])
+  const [cards, setCards] = useState([]);
+  const [start, setStart] = useState(0);
+  const coverCard = "https://5erflies.s3-us-west-1.amazonaws.com/htmls/mvp/gameCover.jpg";
+
+  const flipCards = () => {
+    setStart(start === 0 ? 1 : 0);
+  }
 
   useEffect (() => {
     axios.get('/mvp')
@@ -15,40 +20,43 @@ const App = () => {
     })
     .catch((err) => console.log('err', err))
   },[]);
-  // componentDidMount() {
-  //   axios.get('/mvp')
-  //   .then((res) => {
-  //     this.setState({
-  //       items: res.data
-  //     })
-  //   })
-  //   .catch((err) => {
-  //     console.log('err', err);
-  //   })
-  // }
 
-  // render () {
     return (
       <AppWrapper>
-      <Button>Restart</Button>
-      <h1>Spongebob and Friends</h1>
-      <Card cardInfo={this}></Card>
+      <Header>
+        <Button onClick={flipCards} start={start}>Restart</Button>
+        <Title>Spongebob and Friends</Title>
+      </Header>
+      <Card cards={cards} coverCard={coverCard} start={start}></Card>
       </AppWrapper>
     )
-  // }
 }
 
-const AppWrapper = styled.div`
+const Title = styled.div`
+  margin-left: 290px;
+  margin-top: 20px;
+  font-size: 30px;
+  color: lavenderblush;
+`;
+const Header = styled.div`
   background-color: #2ec1ac;
+  height: 100px;
+  margin-bottom: 20px;
+  border-radius: 7px;
+  justify-content: center;
+`;
+
+const AppWrapper = styled.div`
   font-family: Arial;
   margin: 0 auto;
-  width: 50%;
+  width: 45%;
+  font-family: monospace;
 `;
 
 const Button = styled.button`
-  position: fixed;
-  top: 100px;
-  right: 26%;
+  position: relative;
+  top: 60px;
+  left: 90%;
   cursor: pointer;
   letter-spacing: 0.7px;
   font-size: 14px;
