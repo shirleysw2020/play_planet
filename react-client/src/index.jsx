@@ -3,10 +3,23 @@ import ReactDOM from 'react-dom';
 import axios from 'axios';
 import Cards from './components/Cards.jsx';
 import styled, { keyframes } from 'styled-components';
+import Apod from './components/Apod.jsx';
 
 const App = () => {
   const [cards, setCards] = useState(doubleCards());
   const [start, setStart] = useState(shuffleCards(cards));
+  const [apod, setApod] = useState([]);
+  const [showApod, setshowApod] = useState(false);
+  const [showGame, setshowGame] = useState(false);
+
+
+  const showApodOnClick = () => {
+    setshowApod(!showApod);
+  }
+
+  const showGameOnClick = () => {
+    setshowGame(!showGame);
+  }
 
   const flipCards = () => {
     setStart(start === 0 ? 1 : 0);
@@ -23,9 +36,7 @@ const App = () => {
         frontImg: photos[keyName],
         flipped: false
       });
-      deck.push(makeCard());
-      deck.push(makeCard());
-      return deck;
+      return [...deck, makeCard(), makeCard()];
     }, []);
 
     // set state to be double deck of cards
@@ -43,25 +54,97 @@ const App = () => {
     return cards;
   }
 
-  // useEffect (() => {
-  //   axios.get('/mvp')
-  //   .then((res) => {
-  //     // setCards(res.data);
-  //   })
-  //   .catch((err) => console.log('err', err))
-  // },[]);
+  useEffect (() => {
+    axios.get('/apod')
+    .then((res) => {
+      setApod(res.data);
+    })
+    .catch((err) => console.log('err', err))
+  },[]);
 
+  if (apod === null) {return null;} else {
   return (
-    <AppWrapper>
-    <Header>
-      {/* when start: shuffle cards */}
-      <Button onClick={() => shuffleCards(cards)} start={start}>Restart</Button>
-      <Title>Solar System</Title>
-    </Header>
-    <Cards cards={cards}></Cards>
-    </AppWrapper>
+    <div>
+      <Navigator>
+        <GameButton onClick={showGameOnClick}>GAME</GameButton>
+        <ApodButton onClick={showApodOnClick}>APOD</ApodButton>
+      </Navigator>
+
+      {/* <SlideGame> */}
+      <AppWrapper>
+      <Header showGame={showGame}>
+        {/* when start: shuffle cards */}
+        <Button onClick={() => shuffleCards(cards)} start={start}>Restart</Button>
+        <Title>Solar System</Title>
+      </Header>
+      <Cards showGame={showGame} cards={cards}></Cards>
+      </AppWrapper>
+      {/* </SlideGame> */}
+      <Apod showApod={showApod} apod={apod}></Apod>
+    </div>
   )
+  }
 }
+
+const slideout = keyframes`
+  0% {
+    /* position relative to itself */
+    transform: translateX(0px);
+    opacity: 1;
+  }
+  100% {
+    transform: translateX(-750px);
+    opacity: 1;
+  }
+`;
+
+// const SlideGame= styled.div`
+//   overflow: hidden;
+//   position: relative;
+//   width: 700px;
+// `;
+
+const AppWrapper = styled.div`
+  margin: 20px 0 0 120px;
+  width: 45%;
+  font-family: monospace;
+  max-width: 700px;
+  float: left;
+`;
+
+const Navigator = styled.div`
+  margin: 20px auto;
+  display: flex;
+  justify-content: center;
+`;
+
+const GameButton = styled.button`
+  margin: 20px auto;
+  background-color: white;
+  border: none;
+  background: none;
+  font-size: large;
+  color: grey;
+  &:hover {
+    text-decoration: underline;
+      transform: translate(0%, 13%);
+      transition: 0.2s ease-out;
+    }
+`;
+
+const ApodButton = styled.button`
+  margin: 20px auto;
+  background-color: white;
+  border: none;
+  background: none;
+  font-size: large;
+  color: grey;
+  &:hover {
+    text-decoration: underline;
+      transform: translate(0%, 13%);
+      transition: 0.2s ease-out;
+    }
+`;
 
 const Title = styled.div`
   margin-left: 230px;
@@ -70,37 +153,30 @@ const Title = styled.div`
   color: lavenderblush;
 `;
 const Header = styled.div`
+  display: ${props => props.showGame ? 'block' : 'none'}
   background-color: #ea5455;
   height: 100px;
   margin-bottom: 20px;
   border-radius: 15px;
   justify-content: center;
+  width: 640px;
 `;
 
-const AppWrapper = styled.div`
-  font-family: Arial;
-  /* margin: 0 auto; */
-  margin: 20px 0 0 120px;
-  width: 45%;
-  font-family: monospace;
-  max-width: 700px;
-`;
 
 const Button = styled.button`
   position: relative;
   top: 60px;
   left: 88%;
   cursor: pointer;
+  background-color: white;
+  color: black;
+  border: 2px solid #e7e7e7;
   letter-spacing: 0.7px;
   font-size: 14px;
-  line-height: 18px;
   font-weight: 450;
   border-radius: 7px;
-  color: #000;
   height: 30px;
-  background-color: #decdc3;
   font-family: Circular, -apple-system, BlinkMacSystemFont, Roboto, "Helvetica Neue", sans-serif;
-  border-width: 1px;
   outline: none;
 `;
 

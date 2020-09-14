@@ -4,7 +4,7 @@ import styled from 'styled-components';
 const Card = ({frontImg, backImg, flipped, onClick}) => {
 
    return (
-      <Picture src={flipped ? backImg : frontImg} onClick={onClick}></Picture>
+      <Picture src={flipped ? frontImg : backImg} onClick={onClick}></Picture>
    )
 };
 

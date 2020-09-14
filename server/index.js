@@ -15,7 +15,17 @@ app.get('/weather', (req, res) => {
     console.log('fetch API success!', res.data);
   })
   .catch(err)
-})
+});
+
+app.get('/apod', (req, res) => {
+  axios.get(`https://api.nasa.gov/planetary/apod?api_key=${access_token.KEY}`)
+  .then((result) => {
+    const pickedApodData = (({ title, explanation, date, url }) => ({ title, explanation, date, url }))(result.data);
+    // console.log('fetch API success!', pickedApodData);
+    res.status(200).send(pickedApodData);
+  })
+  .catch((err) => console.log(err));
+});
 
 app.get('/mvp', function (req, res) {
   model.selectAll(function(err, data) {
