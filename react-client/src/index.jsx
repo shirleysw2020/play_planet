@@ -70,46 +70,45 @@ const App = () => {
         <ApodButton onClick={showApodOnClick}>APOD</ApodButton>
       </Navigator>
 
-      {/* <SlideGame> */}
-      <AppWrapper>
-      <Header showGame={showGame}>
-        {/* when start: shuffle cards */}
-        <Button onClick={() => shuffleCards(cards)} start={start}>Restart</Button>
-        <Title>Solar System</Title>
-      </Header>
-      <Cards showGame={showGame} cards={cards}></Cards>
+      <AppWrapper showGame={showGame}>
+        <Header>
+          {/* when start: shuffle cards */}
+          <Button onClick={() => shuffleCards(cards)} start={start}>Restart</Button>
+          <Title>Solar System</Title>
+        </Header>
+        <Cards cards={cards}></Cards>
       </AppWrapper>
-      {/* </SlideGame> */}
       <Apod showApod={showApod} apod={apod}></Apod>
     </div>
   )
   }
 }
 
-const slideout = keyframes`
+const slidein = keyframes`
   0% {
     /* position relative to itself */
-    transform: translateX(0px);
-    opacity: 1;
+    transform: translateX(-1000px);
+    /* opacity: 1; */
   }
   100% {
-    transform: translateX(-750px);
-    opacity: 1;
+    transform: translateX(1000px);
+    /* opacity: 1; */
   }
 `;
 
-// const SlideGame= styled.div`
-//   overflow: hidden;
-//   position: relative;
-//   width: 700px;
-// `;
-
 const AppWrapper = styled.div`
   margin: 20px 0 0 120px;
-  width: 45%;
   font-family: monospace;
   max-width: 700px;
   float: left;
+  overflow: hidden;
+  width: 700px;
+  animation: ${props => props.showGame ? slidein : 'none'};
+  animation-duration: 0.7s;
+  animation-fill-mode: forwards;
+  left: -1000px;
+  display: inline-block;
+  position: absolute; //for overlap the gallery
 `;
 
 const Navigator = styled.div`
@@ -119,29 +118,31 @@ const Navigator = styled.div`
 `;
 
 const GameButton = styled.button`
-  margin: 20px auto;
+  margin: 20px 20px;
   background-color: white;
   border: none;
   background: none;
   font-size: large;
   color: grey;
+  border-bottom: 1px solid grey;
+  outline: none;
   &:hover {
-    text-decoration: underline;
-      transform: translate(0%, 13%);
+      transform: translate(0%, 10%);
       transition: 0.2s ease-out;
     }
 `;
 
 const ApodButton = styled.button`
-  margin: 20px auto;
+  margin: 20px 20px;
   background-color: white;
   border: none;
   background: none;
   font-size: large;
   color: grey;
+  border-bottom: 1px solid grey;
+  outline: none;
   &:hover {
-    text-decoration: underline;
-      transform: translate(0%, 13%);
+      transform: translate(0%, 10%);
       transition: 0.2s ease-out;
     }
 `;
@@ -153,13 +154,11 @@ const Title = styled.div`
   color: lavenderblush;
 `;
 const Header = styled.div`
-  display: ${props => props.showGame ? 'block' : 'none'}
   background-color: #ea5455;
   height: 100px;
   margin-bottom: 20px;
   border-radius: 15px;
   justify-content: center;
-  width: 640px;
 `;
 
 

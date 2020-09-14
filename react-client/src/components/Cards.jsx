@@ -48,8 +48,7 @@ const Cards = (props) => {
     setCards(newCards);
   }, [checkers, completed])
 
-  return props.showGame ?
-  (
+  return (
     <GameBoard>
       <GridContainer>
         {cards.map((card) => {
@@ -60,7 +59,6 @@ const Cards = (props) => {
       </GridContainer>
     </GameBoard>
   )
-  : null
 };
 
 const GridContainer = styled.div`
@@ -84,7 +82,6 @@ const GameBoard = styled.div`
   border-radius: 15px;
   padding-left: 20px;
   padding-right: 20px;
-  max-width: 600px;
 `;
 
 
