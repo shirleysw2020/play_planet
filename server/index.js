@@ -1,13 +1,21 @@
-var express = require('express');
-var bodyParser = require('body-parser');
-// UNCOMMENT THE DATABASE YOU'D LIKE TO USE
-// var items = require('../database-mysql');
-var model = require('../database-mongo');
-
-var app = express();
+const express = require('express');
+const bodyParser = require('body-parser');
+const axios = require('axios');
+const model = require('../database-mongo');
+const app = express();
+const access_token = require('../config.js');
 
 // UNCOMMENT FOR REACT
 app.use(express.static(__dirname + '/../react-client/dist'));
+
+
+app.get('/weather', (req, res) => {
+  axios.get(`https://api.nasa.gov/insight_weather/?api_key=${access_token.KEY}&feedtype=json&ver=1.0`)
+  .then((res) => {
+    console.log('fetch API success!', res.data);
+  })
+  .catch(err)
+})
 
 app.get('/mvp', function (req, res) {
   model.selectAll(function(err, data) {

@@ -1,45 +1,76 @@
 import React, { useState, useEffect } from 'react';
 import ReactDOM from 'react-dom';
 import axios from 'axios';
-import Card from './components/Card.jsx';
+import Cards from './components/Cards.jsx';
 import styled, { keyframes } from 'styled-components';
 
 const App = () => {
-  const [cards, setCards] = useState([]);
-  const [start, setStart] = useState(0);
-  const coverCard = "https://5erflies.s3-us-west-1.amazonaws.com/htmls/mvp/gameCover.jpg";
+  const [cards, setCards] = useState(doubleCards());
+  const [start, setStart] = useState(shuffleCards(cards));
 
   const flipCards = () => {
     setStart(start === 0 ? 1 : 0);
   }
 
-  useEffect (() => {
-    axios.get('/mvp')
-    .then((res) => {
-      setCards(res.data);
-    })
-    .catch((err) => console.log('err', err))
-  },[]);
+  function doubleCards(){
+    let cardId = 0;
 
-    return (
-      <AppWrapper>
-      <Header>
-        <Button onClick={flipCards} start={start}>Restart</Button>
-        <Title>Spongebob and Friends</Title>
-      </Header>
-      <Card cards={cards} coverCard={coverCard} start={start}></Card>
-      </AppWrapper>
-    )
+    const cards = Object.keys(photos).reduce((deck,keyName) => {
+      const makeCard = () => ({
+        id: cardId++,
+        type: keyName,
+        backImg: 'https://5erflies.s3-us-west-1.amazonaws.com/htmls/mvp/planets/cover.jpg',
+        frontImg: photos[keyName],
+        flipped: false
+      });
+      deck.push(makeCard());
+      deck.push(makeCard());
+      return deck;
+    }, []);
+
+    // set state to be double deck of cards
+    const shuffled = shuffleCards(cards);
+    return shuffled;
+  }
+
+  function shuffleCards(cards){
+    for (let i = cards.length - 1; i >= 0; i--){
+      const j = Math.floor(Math.random() * i);
+      const temp = cards[i];
+      cards[i] = cards[j];
+      cards[j] = temp;
+    }
+    return cards;
+  }
+
+  // useEffect (() => {
+  //   axios.get('/mvp')
+  //   .then((res) => {
+  //     // setCards(res.data);
+  //   })
+  //   .catch((err) => console.log('err', err))
+  // },[]);
+
+  return (
+    <AppWrapper>
+    <Header>
+      {/* when start: shuffle cards */}
+      <Button onClick={() => shuffleCards(cards)} start={start}>Restart</Button>
+      <Title>Solar System</Title>
+    </Header>
+    <Cards cards={cards}></Cards>
+    </AppWrapper>
+  )
 }
 
 const Title = styled.div`
-  margin-left: 290px;
+  margin-left: 230px;
   margin-top: 20px;
   font-size: 30px;
   color: lavenderblush;
 `;
 const Header = styled.div`
-  background-color: #2ec1ac;
+  background-color: #ea5455;
   height: 100px;
   margin-bottom: 20px;
   border-radius: 15px;
@@ -48,15 +79,17 @@ const Header = styled.div`
 
 const AppWrapper = styled.div`
   font-family: Arial;
-  margin: 0 auto;
+  /* margin: 0 auto; */
+  margin: 20px 0 0 120px;
   width: 45%;
   font-family: monospace;
+  max-width: 700px;
 `;
 
 const Button = styled.button`
   position: relative;
   top: 60px;
-  left: 90%;
+  left: 88%;
   cursor: pointer;
   letter-spacing: 0.7px;
   font-size: 14px;
@@ -65,115 +98,22 @@ const Button = styled.button`
   border-radius: 7px;
   color: #000;
   height: 30px;
-  background-color: #eff48e;
+  background-color: #decdc3;
   font-family: Circular, -apple-system, BlinkMacSystemFont, Roboto, "Helvetica Neue", sans-serif;
   border-width: 1px;
   outline: none;
 `;
 
-// class App extends React.Component {
-//   constructor(props) {
-//     super(props);
-//     this.state = {
-//       isFlipped: Array(16).fill(false),
-//       shuffledCard: App.duplicateCard().sort(() => Math.random() - 0.5),
-//       clickCount: 1,
-//       prevSelectedCard: -1,
-//       prevCardId: -1
-//     };
-//   }
-
-//   const DuplicateCard = () => {
-//     return [0,1,2,3,4,5,6,7].reduce((preValue, current, index, array) => {
-//       return preValue.concat([current, current])
-//     },[]);
-//   };
-
-//   handleClick = event => {
-//     event.preventDefault();
-//     const cardId = event.target.id;
-//     const newFlipps = this.state.isFlipped.slice();
-//     this.setState({
-//         prevSelectedCard: this.state.shuffledCard[cardId],
-//         prevCardId: cardId
-//     });
-
-//     if (newFlipps[cardId] === false) {
-//       newFlipps[cardId] = !newFlipps[cardId];
-//       this.setState(prevState => ({
-//         isFlipped: newFlipps,
-//         clickCount: this.state.clickCount + 1
-//       }));
-
-//       if (this.state.clickCount === 2) {
-//         this.setState({ clickCount: 1 });
-//         const prevCardId = this.state.prevCardId;
-//         const newCard = this.state.shuffledCard[cardId];
-//         const previousCard = this.state.prevSelectedCard;
-
-//         this.isCardMatch(previousCard, newCard, prevCardId, cardId);
-//       }
-//     }
-//   };
-
-//   isCardMatch = (card1, card2, card1Id, card2Id) => {
-//     if (card1 === card2) {
-//       const hideCard = this.state.shuffledCard.slice();
-//       hideCard[card1Id] = -1;
-//       hideCard[card2Id] = -1;
-//       setTimeout(() => {
-//         this.setState(prevState => ({
-//           shuffledCard: hideCard
-//         }))
-//       }, 1000);
-//     } else {
-//       const flipBack = this.state.isFlipped.slice();
-//       flipBack[card1Id] = false;
-//       flipBack[card2Id] = false;
-//       setTimeout(() => {
-//         this.setState(prevState => ({ isFlipped: flipBack }));
-//       }, 1000);
-//     }
-//   };
-
-//   restartGame = () => {
-//     this.setState({
-//       isFlipped: Array(16).fill(false),
-//       shuffledCard: App.duplicateCard().sort(() => Math.random() - 0.5),
-//       clickCount: 1,
-//       prevSelectedCard: -1,
-//       prevCardId: -1
-//     });
-//   };
-
-//   isGameOver = () => {
-//     return this.state.isFlipped.every((element, index, array) => element !== false);
-//   };
-
-//   render() {
-//     return (
-//     <div>
-//       <Header restartGame={this.restartGame} />
-//       { this.isGameOver() ? <GameOver restartGame={this.restartGame} /> :
-//       <div className="grid-container">
-//           {
-//             this.state.shuffledCard.map((cardNumber, index) =>
-//               <Card
-//                 key={index}
-//                 id={index}
-//                 cardNumber={cardNumber}
-//                 isFlipped={this.state.isFlipped[index]}
-//                 handleClick={this.handleClick}
-//               />
-//             )
-//           }
-//         </div>
-//       }
-//     </div>
-//     );
-//   }
-// }
-
+const photos = {
+  asteroid: 'https://5erflies.s3-us-west-1.amazonaws.com/htmls/mvp/planets/asteroid.png',
+  blackhole: 'https://5erflies.s3-us-west-1.amazonaws.com/htmls/mvp/planets/blackhole.png',
+  comets: 'https://5erflies.s3-us-west-1.amazonaws.com/htmls/mvp/planets/comets.png',
+  earth: 'https://5erflies.s3-us-west-1.amazonaws.com/htmls/mvp/planets/earth.png',
+  galaxy: 'https://5erflies.s3-us-west-1.amazonaws.com/htmls/mvp/planets/galaxy.png',
+  haumea: 'https://5erflies.s3-us-west-1.amazonaws.com/htmls/mvp/planets/haumea.png',
+  jupiter: 'https://5erflies.s3-us-west-1.amazonaws.com/htmls/mvp/planets/jupiter.png',
+  mars: 'https://5erflies.s3-us-west-1.amazonaws.com/htmls/mvp/planets/mars.png'
+};
 
 
 ReactDOM.render(<App />, document.getElementById('app'));

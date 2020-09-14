@@ -1,0 +1,7 @@
+{
+  "name": "mvp",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "react"
+}
