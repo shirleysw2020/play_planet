@@ -12,7 +12,6 @@ const App = () => {
   const [showApod, setshowApod] = useState(false);
   const [showGame, setshowGame] = useState(false);
 
-
   const showApodOnClick = () => {
     setshowApod(!showApod);
   }
@@ -58,6 +57,7 @@ const App = () => {
     axios.get('/apod')
     .then((res) => {
       setApod(res.data);
+      console.log(res.data);
     })
     .catch((err) => console.log('err', err))
   },[]);
@@ -86,33 +86,27 @@ const App = () => {
 
 const slidein = keyframes`
   0% {
-    /* position relative to itself */
     transform: translateX(-1000px);
-    /* opacity: 1; */
+    opacity: 0;
   }
-  100% {
-    transform: translateX(1000px);
-    /* opacity: 1; */
-  }
+  100% {transform: translateX(calc(50vw + 350px))}
 `;
 
 const AppWrapper = styled.div`
-  margin: 20px 0 0 120px;
+  /* margin: 20px 0 0 120px; */
   font-family: monospace;
-  max-width: 700px;
   float: left;
   overflow: hidden;
   width: 700px;
   animation: ${props => props.showGame ? slidein : 'none'};
   animation-duration: 0.7s;
   animation-fill-mode: forwards;
-  left: -1000px;
+  left: -700px;
   display: inline-block;
-  position: absolute; //for overlap the gallery
+  position: absolute;
 `;
 
 const Navigator = styled.div`
-  margin: 20px auto;
   display: flex;
   justify-content: center;
 `;
@@ -167,9 +161,9 @@ const Button = styled.button`
   top: 60px;
   left: 88%;
   cursor: pointer;
-  background-color: white;
-  color: black;
-  border: 2px solid #e7e7e7;
+  background-color: #ea5455;
+  color: #FFFFFF;
+  border: 1px solid lavenderblush;
   letter-spacing: 0.7px;
   font-size: 14px;
   font-weight: 450;
