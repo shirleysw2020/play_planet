@@ -1,14 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import Card from './Card.jsx';
-// import ReactCardFlip from "react-card-flip";
 
 const Cards = (props) => {
-
-  const [cards, setCards] = useState(props.cards);
   const [checkers, setCheckers] = useState([]);
   const [completed, setCompleted] = useState([]);
-  const [cardflipped, setFlip] = useState(false);
 
   const checkFull = (checkers) => {
     return checkers.length == 2;
@@ -33,25 +29,30 @@ const Cards = (props) => {
       setCompleted([...completed, newCheckers[0].type]);
     }
     if (checkFull(newCheckers)) {
-      setTimeout(() => {setCheckers([])}, 1000);
+      setTimeout(() => {setCheckers([])}, 900);
     }
   }
 
   useEffect(() => {
-    const newCards = cards.map(card => ({
+    const newCards = props.cards.map(card => ({
       ...card,
       flipped:
         // if 2 reach 2 cards then setCheckers becomes empty, 45line will be false
         checkers.find(c => c.id == card.id) ||
         completed.includes(card.type),
     }))
-    setCards(newCards);
-  }, [checkers, completed])
+    props.updateCards(newCards);
+  }, [checkers, completed]);
+
+  // useEffect(() => {
+  //   completed.slice(0,completed.length);
+  //   checkers.slice(0,checkers.length);
+  // }, [props.restart])
 
   return (
     <GameBoard>
       <GridContainer>
-        {cards.map((card) => {
+        {props.cards.map((card) => {
           return (
             <Card onClick={() => flipCard(card)} {...card}></Card>
           )

@@ -22,7 +22,7 @@ const Apod = (props) => {
     .catch((err) => console.log('err', err))
   },[]);
 
-  const searchPicture = () => {
+  const searchPicture = (event) => {
     event.preventDefault();
     validateDate(searchInput);
 
@@ -40,21 +40,24 @@ const Apod = (props) => {
     .catch((err) => console.log('failed to fetch apod'));
   }
 
-  const handleChange =() => {
-    setSearchInput(event.target.value);
+  const handleChange =(e) => {
+    setSearchInput(e.target.value);
   }
 
   return props.showApod ?
   (
     <div>
     <SearchBar>
-      <StyledInput name="search" placeholder="Enter YYYY-MM-DD" onChange={handleChange}/>
-      <SearchButton onClick={searchPicture}>
-        Search
-      </SearchButton>
+      <form>
+        <StyledInput type="text" id="search" value={searchInput} name="search" placeholder="Enter YYYY-MM-DD" onChange={handleChange}/>
+        <SearchButton onClick={searchPicture}>
+          Search
+        </SearchButton>
+      </form>
     </SearchBar>
     <ApodCard>
       <Title>Astronomy Picture of The Day</Title>
+      <Date>{apod.date}</Date>
       <ApodImg src={apod.url}></ApodImg>
       <Subheading>{apod.title}</Subheading>
       <Description>{apod.explanation}</Description>
@@ -114,6 +117,16 @@ const Description = styled.div`
   margin: 18px 40px;
   font-size: 16px;
   font-family: arial;
+  line-height: 1.3;
+`;
+
+const Date = styled.div`
+  margin: 18px 40px;
+  font-size: 14px;
+  font-family: arial;
+  line-height: 1;
+  text-align: center;
+  font-family: monospace;
 `;
 
 const ApodCard = styled.div`
@@ -123,7 +136,6 @@ const ApodCard = styled.div`
   box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
   margin-top: 20px;
   padding-bottom: 20px;
-  /* font-family: monospace; */
   font-size: 30px;
 `;
 

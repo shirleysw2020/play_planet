@@ -7,10 +7,10 @@ import Apod from './components/Apod.jsx';
 
 const App = () => {
   const [cards, setCards] = useState(doubleCards());
-  const [start, setStart] = useState(shuffleCards(cards));
   const [apod, setApod] = useState([]);
-  const [showApod, setshowApod] = useState(false);
+  const [showApod, setshowApod] = useState(true);
   const [showGame, setshowGame] = useState(false);
+  const [restart, setRestart] = useState(0);
 
   const showApodOnClick = () => {
     setshowGame(false);
@@ -22,8 +22,28 @@ const App = () => {
     setshowGame(!showGame);
   }
 
-  const flipCards = () => {
-    setStart(start === 0 ? 1 : 0);
+  const updateCards = (gamingCards) => {
+    setCards(gamingCards);
+  }
+
+  const restatrGame = () => {
+    //testting...
+    setRestart(restart + 1);
+  }
+
+  const shuffleCards = () => {
+    var shuffledCards = cards;
+    for (let i = 0; i < shuffledCards.length; i++) {
+      shuffledCards[i].flipped = false;
+    }
+    console.log(shuffledCards, 'all flipped false')
+    for (let i = shuffledCards.length - 1; i >= 0; i--){
+      const j = Math.floor(Math.random() * i);
+      const temp = shuffledCards[i];
+      shuffledCards[i] = shuffledCards[j];
+      shuffledCards[j] = temp;
+    }
+    setCards(shuffledCards);
   }
 
   function doubleCards(){
@@ -40,12 +60,6 @@ const App = () => {
       return [...deck, makeCard(), makeCard()];
     }, []);
 
-    // set state to be double deck of cards
-    const shuffled = shuffleCards(cards);
-    return shuffled;
-  }
-
-  function shuffleCards(cards){
     for (let i = cards.length - 1; i >= 0; i--){
       const j = Math.floor(Math.random() * i);
       const temp = cards[i];
@@ -56,10 +70,11 @@ const App = () => {
   }
 
   useEffect (() => {
+    setCards(cards);
     axios.get('/apod')
     .then((res) => {
       setApod(res.data);
-      console.log(res.data);
+      // console.log(res.data);
     })
     .catch((err) => console.log('err', err))
   },[]);
@@ -75,10 +90,10 @@ const App = () => {
       <AppWrapper showGame={showGame}>
         <Header>
           {/* when start: shuffle cards */}
-          <Button onClick={() => shuffleCards(cards)} start={start}>Restart</Button>
+          <Button onClick={shuffleCards} onClick={setRestart}>Restart</Button>
           <Title>Solar System</Title>
         </Header>
-        <Cards cards={cards}></Cards>
+        <Cards cards={cards} updateCards={updateCards}></Cards>
       </AppWrapper>
       <Apod showApod={showApod} apod={apod}></Apod>
     </div>
@@ -159,7 +174,6 @@ const Header = styled.div`
   justify-content: center;
 `;
 
-
 const Button = styled.button`
   position: relative;
   top: 60px;
@@ -175,6 +189,10 @@ const Button = styled.button`
   height: 30px;
   font-family: Circular, -apple-system, BlinkMacSystemFont, Roboto, "Helvetica Neue", sans-serif;
   outline: none;
+  &: hover {
+    border: 1px solid #e57b7b;
+    background-color: #e5b5b5;
+  }
 `;
 
 const photos = {
