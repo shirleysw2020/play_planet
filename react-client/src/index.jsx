@@ -13,10 +13,12 @@ const App = () => {
   const [showGame, setshowGame] = useState(false);
 
   const showApodOnClick = () => {
+    setshowGame(false);
     setshowApod(!showApod);
   }
 
   const showGameOnClick = () => {
+    setshowApod(false);
     setshowGame(!showGame);
   }
 
@@ -120,6 +122,7 @@ const GameButton = styled.button`
   color: grey;
   border-bottom: 1px solid grey;
   outline: none;
+  cursor: pointer;
   &:hover {
       transform: translate(0%, 10%);
       transition: 0.2s ease-out;
@@ -135,6 +138,7 @@ const ApodButton = styled.button`
   color: grey;
   border-bottom: 1px solid grey;
   outline: none;
+  cursor: pointer;
   &:hover {
       transform: translate(0%, 10%);
       transition: 0.2s ease-out;
