@@ -44,10 +44,10 @@ const Cards = (props) => {
     props.updateCards(newCards);
   }, [checkers, completed]);
 
-  // useEffect(() => {
-  //   completed.slice(0,completed.length);
-  //   checkers.slice(0,checkers.length);
-  // }, [props.restart])
+  useEffect(() => {
+    completed.slice(0,completed.length);
+    checkers.slice(0,checkers.length);
+  }, [props.restart])
 
   return (
     <GameBoard>

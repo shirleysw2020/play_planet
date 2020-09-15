@@ -10,7 +10,7 @@ const App = () => {
   const [apod, setApod] = useState([]);
   const [showApod, setshowApod] = useState(true);
   const [showGame, setshowGame] = useState(false);
-  const [restart, setRestart] = useState(0);
+  // const [restart, setRestart] = useState(0);
 
   const showApodOnClick = () => {
     setshowGame(false);
@@ -26,16 +26,18 @@ const App = () => {
     setCards(gamingCards);
   }
 
-  const restatrGame = () => {
-    //testting...
-    setRestart(restart + 1);
-  }
+  // const restartGame = () => {
+  //   //testting...
+  //   setRestart(restart + 1);
+  // }
 
   const shuffleCards = () => {
+    console.log('shuffle begins...')
     var shuffledCards = cards;
     for (let i = 0; i < shuffledCards.length; i++) {
       shuffledCards[i].flipped = false;
     }
+    setCards(shuffledCards);
     console.log(shuffledCards, 'all flipped false')
     for (let i = shuffledCards.length - 1; i >= 0; i--){
       const j = Math.floor(Math.random() * i);
@@ -48,7 +50,6 @@ const App = () => {
 
   function doubleCards(){
     let cardId = 0;
-
     const cards = Object.keys(photos).reduce((deck,keyName) => {
       const makeCard = () => ({
         id: cardId++,
@@ -74,7 +75,6 @@ const App = () => {
     axios.get('/apod')
     .then((res) => {
       setApod(res.data);
-      // console.log(res.data);
     })
     .catch((err) => console.log('err', err))
   },[]);
@@ -90,7 +90,7 @@ const App = () => {
       <AppWrapper showGame={showGame}>
         <Header>
           {/* when start: shuffle cards */}
-          <Button onClick={shuffleCards} onClick={setRestart}>Restart</Button>
+          <Button  onClick={shuffleCards}>Restart</Button>
           <Title>Solar System</Title>
         </Header>
         <Cards cards={cards} updateCards={updateCards}></Cards>
