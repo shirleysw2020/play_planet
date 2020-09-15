@@ -3,33 +3,33 @@ import styled from 'styled-components';
 import Card from './Card.jsx';
 
 const Cards = (props) => {
-  const [checkers, setCheckers] = useState([]);
-  const [completed, setCompleted] = useState([]);
+  // const [checkers, setCheckers] = useState([]);
+  // const [completed, setCompleted] = useState([]);
 
   const checkFull = (checkers) => {
-    return checkers.length == 2;
+    return props.checkers.length == 2;
   }
 
   const isMatched = (checkers) => {
-    return ( checkers.length == 2 && checkers[0].type == checkers[1].type );
+    return ( props.checkers.length == 2 && props.checkers[0].type == props.checkers[1].type );
   }
 
   const flipCard = (card) => {
     // // if usr click on same card twice, exit immediately.
-    if (checkers.length == 1 && checkers[0].id == card.id) {
+    if (props.checkers.length == 1 && props.checkers[0].id == card.id) {
       return;
     }
     // add user clicked card to checkers
-    const newCheckers = [...checkers, card];
+    const newCheckers = [...props.checkers, card];
     // set state happens asynchronously...
-    setCheckers(newCheckers);
+    props.setCheckers(newCheckers);
 
     // only execuete the following if 2 cards was clicked!
     if (isMatched(newCheckers)) {
-      setCompleted([...completed, newCheckers[0].type]);
+      props.setCompleted([...props.completed, newCheckers[0].type]);
     }
     if (checkFull(newCheckers)) {
-      setTimeout(() => {setCheckers([])}, 900);
+      setTimeout(() => {props.setCheckers([])}, 900);
     }
   }
 
@@ -38,15 +38,15 @@ const Cards = (props) => {
       ...card,
       flipped:
         // if 2 reach 2 cards then setCheckers becomes empty, 45line will be false
-        checkers.find(c => c.id == card.id) ||
-        completed.includes(card.type),
+        props.checkers.find(c => c.id == card.id) ||
+        props.completed.includes(card.type),
     }))
     props.updateCards(newCards);
-  }, [checkers, completed]);
+  }, [props.checkers, props.completed]);
 
   useEffect(() => {
-    completed.slice(0,completed.length);
-    checkers.slice(0,checkers.length);
+    props.completed.slice(0,props.completed.length);
+    props.checkers.slice(0,props.checkers.length);
   }, [props.restart])
 
   return (

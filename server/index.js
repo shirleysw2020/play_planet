@@ -13,7 +13,7 @@ app.use(express.static(__dirname + '/../react-client/dist'));
 app.get('/weather', (req, res) => {
   axios.get(`https://api.nasa.gov/insight_weather/?api_key=${access_token.KEY}&feedtype=json&ver=1.0`)
   .then((res) => {
-    console.log('fetch API success!', res.data);
+    // console.log('fetch API success!', res.data);
   })
   .catch(err)
 });

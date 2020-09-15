@@ -4,32 +4,46 @@ import axios from 'axios';
 import Cards from './components/Cards.jsx';
 import styled, { keyframes } from 'styled-components';
 import Apod from './components/Apod.jsx';
+import Cart from './components/Cart.jsx';
 
 const App = () => {
   const [cards, setCards] = useState(doubleCards());
   const [apod, setApod] = useState([]);
   const [showApod, setshowApod] = useState(true);
   const [showGame, setshowGame] = useState(false);
-  // const [restart, setRestart] = useState(0);
+  const [checkers, setCheckers] = useState([]);
+  const [completed, setCompleted] = useState([]);
+  const [showCart, setShowCart] = useState(false);
+  const [newApod, setNewApod] = useState([]);
+  const [savedApod, setSavedApod] = useState([]);
+
+  const addToSaveList = () => {
+    setApod(apod);
+    console.log(newApod, 'can i get newapod?')
+    setNewApod([...newApod, apod]);
+  }
+
+  const showCartOnClick = () => {
+    setshowApod(false);
+    setshowGame(false);
+    setShowCart(!showCart);
+  }
 
   const showApodOnClick = () => {
     setshowGame(false);
+    setShowCart(false);
     setshowApod(!showApod);
   }
 
   const showGameOnClick = () => {
     setshowApod(false);
+    setShowCart(false);
     setshowGame(!showGame);
   }
 
   const updateCards = (gamingCards) => {
     setCards(gamingCards);
   }
-
-  // const restartGame = () => {
-  //   //testting...
-  //   setRestart(restart + 1);
-  // }
 
   const shuffleCards = () => {
     console.log('shuffle begins...')
@@ -85,6 +99,7 @@ const App = () => {
       <Navigator>
         <GameButton onClick={showGameOnClick}>GAME</GameButton>
         <ApodButton onClick={showApodOnClick}>APOD</ApodButton>
+        <CartButton onClick={showCartOnClick}>CART</CartButton>
       </Navigator>
 
       <AppWrapper showGame={showGame}>
@@ -93,9 +108,10 @@ const App = () => {
           <Button  onClick={shuffleCards}>Restart</Button>
           <Title>Solar System</Title>
         </Header>
-        <Cards cards={cards} updateCards={updateCards}></Cards>
+        <Cards cards={cards} updateCards={updateCards} checkers={checkers} completed={completed} setCheckers={setCheckers} setCompleted={setCompleted}></Cards>
       </AppWrapper>
-      <Apod showApod={showApod} apod={apod}></Apod>
+      <Apod showApod={showApod} apod={apod} addToSaveList={addToSaveList}></Apod>
+      <Cart showCart={showCart}></Cart>
     </div>
   )
   }
@@ -145,6 +161,22 @@ const GameButton = styled.button`
 `;
 
 const ApodButton = styled.button`
+  margin: 20px 20px;
+  background-color: white;
+  border: none;
+  background: none;
+  font-size: large;
+  color: grey;
+  border-bottom: 1px solid grey;
+  outline: none;
+  cursor: pointer;
+  &:hover {
+      transform: translate(0%, 10%);
+      transition: 0.2s ease-out;
+    }
+`;
+
+const CartButton = styled.button`
   margin: 20px 20px;
   background-color: white;
   border: none;

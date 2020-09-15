@@ -7,6 +7,13 @@ const Apod = (props) => {
 
   const [searchInput, setSearchInput] = useState('');
   const [apod, setApod] = useState(props.apod);
+  const [newApod, setNewApod] = useState([]);
+  // const [savedApod, setSavedApod] = useState([]);
+
+  // const addToSaveList = () => {
+  //   console.log(newApod, 'can i get newapod?')
+  //   setNewApod([...newApod, apod]);
+  // }
 
   const validateDate = (input) => {
     return (searchInput.match(/^\d{4}[./-]\d{2}[./-]\d{2}$/));
@@ -56,6 +63,7 @@ const Apod = (props) => {
       </form>
     </SearchBar>
     <ApodCard>
+      <Add onClick={props.addToSaveList}>+</Add>
       <Title>Astronomy Picture of The Day</Title>
       <Date>{apod.date}</Date>
       <ApodImg src={apod.url}></ApodImg>
@@ -65,6 +73,28 @@ const Apod = (props) => {
     </div>
   ) : null
 }
+
+const Add = styled.button`
+margin-top: 12px;
+  margin-left: 9px;
+  outline: none;
+  margin-left:5px;
+  padding-top: 5px;
+  padding-bottom: 3px;
+  padding-left: 10px;
+  padding-right: 10px;
+  font-size: 20px;
+  border-radius: 45px;
+  border: 1px solid #cecdcd;
+  background-color: #f5f5f5;
+  letter-spacing: 0.7px;
+  font-size: 20px;
+  cursor: pointer;
+  &: hover {
+    border: 1px solid #e57b7b;
+    background-color: white;
+  }
+`;
 
 const SearchBar = styled.div`
   text-align: right;
